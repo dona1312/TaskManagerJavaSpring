@@ -16,7 +16,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Login</title>
+    <title>Register</title>
     <!-- Bootstrap CSS -->
     <%-- <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet"> --%>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -28,7 +28,6 @@
 </head>
 <body class=".container-fluid">
 <div class="container myrow-container">
-    <c:if test="${empty loggedUser}">
         <div class="panel panel-success">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -63,12 +62,6 @@
                     </div>
 
                     <div class="form-group">
-                        <c:if test="${not empty wrongLogin}">
-                            <p>${wrongLogin}</p>
-                        </c:if>
-                    </div>
-
-                    <div class="form-group">
                         <div class="row">
                             <div class="col-xs-4">
                             </div>
@@ -86,11 +79,6 @@
                 </div>
             </div>
         </div>
-    </c:if>
-    <c:if test="${not empty loggedUser}">
-        <div><p>You are logged in as ${loggedUser.username}. Please logout first.</p></div>
-        <div><a href="logoutUser"><button type="button" class="btn btn-success" value="Logout">Logout</button></a></div>
-    </c:if>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

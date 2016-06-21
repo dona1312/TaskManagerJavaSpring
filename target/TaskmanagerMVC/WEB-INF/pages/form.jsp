@@ -28,7 +28,6 @@
 </head>
 <body class=".container-fluid">
 <div class="container myrow-container">
-    <c:if test="${empty loggedUser}">
         <div class="panel panel-success">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -58,12 +57,6 @@
                     </div>
 
                     <div class="form-group">
-                        <c:if test="${not empty wrongLogin}">
-                            <p>${wrongLogin}</p>
-                        </c:if>
-                    </div>
-
-                    <div class="form-group">
                         <div class="row">
                             <div class="col-xs-4">
                             </div>
@@ -81,11 +74,6 @@
                 </div>
             </div>
         </div>
-    </c:if>
-    <c:if test="${not empty loggedUser}">
-        <div><p>You are logged in as ${loggedUser.username}. Please logout first.</p></div>
-        <div><a href="logoutUser"><button type="button" class="btn btn-success" value="Logout">Logout</button></a></div>
-    </c:if>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

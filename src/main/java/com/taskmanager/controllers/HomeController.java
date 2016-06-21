@@ -3,6 +3,7 @@ package com.taskmanager.controllers;
 import com.taskmanager.entity.User;
 import com.taskmanager.services.auth.AuthenticationService;
 import com.taskmanager.services.impl.UserServiceImpl;
+import com.taskmanager.viewmodels.users.UserEditVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,11 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.*;
 
-
-/**
- * Created by dona on 13.06.16.
- */
-
 @Controller
 @RequestMapping("/")
 public class HomeController {
@@ -26,7 +22,7 @@ public class HomeController {
     private UserServiceImpl userService;
 
     @RequestMapping(value = "/loginUser",method = RequestMethod.POST)
-    public ModelAndView loginUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, ModelMap model){
+    public ModelAndView loginUser(@ModelAttribute @Valid UserEditVM user, BindingResult bindingResult, ModelMap model){
 
         if (bindingResult.hasErrors()){
             model.addAttribute("errors",bindingResult.getAllErrors());
@@ -48,7 +44,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "logout")
-    public  ModelAndView logout(@ModelAttribute User user){
+    public  ModelAndView logout(@ModelAttribute UserEditVM user){
         AuthenticationService.setLoggedUser(null);
         return  new ModelAndView("redirect:/login");
     }
@@ -59,15 +55,27 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/register",method=RequestMethod.POST)
-    public ModelAndView register(@Valid @ModelAttribute("user") User user,BindingResult bindingResult,ModelMap model){
+    public ModelAndView register(@Valid @ModelAttribute UserEditVM vm,BindingResult bindingResult,ModelMap model){
 
         if (bindingResult.hasErrors()){
             model.addAttribute("errors",bindingResult.getAllErrors());
-            model.addAttribute("user",user);
-            return new ModelAndView("register","user",user);
+            model.addAttribute("user",vm);
+            return new ModelAndView("register","user",vm);
         }
         else{
-            userService.create(user);
+                User user;
+                if (vm.getId()==0){
+                    user=new User();
+                }else{
+                    user=userService.getByID(vm.getId());
+                }
+
+                user.setUsername(vm.getUsername());
+                user.setPassword(vm.getPassword());
+                user.setIsAdmin(vm.getIsAdmin());
+                user.setFullName(vm.getFullName());
+
+                userService.save(user);
             return new ModelAndView("redirect:/login");
         }
     }
