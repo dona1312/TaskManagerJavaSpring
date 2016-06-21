@@ -3,6 +3,8 @@ package com.taskmanager.controllers;
 import com.taskmanager.entity.Task;
 import com.taskmanager.services.auth.AuthenticationService;
 import com.taskmanager.services.impl.TaskServiceImpl;
+import com.taskmanager.viewmodels.tasks.TaskEditVM;
+import com.taskmanager.viewmodels.tasks.TaskListVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,77 +30,77 @@ public class TaskController {
     @Autowired
     private TaskServiceImpl taskService;
 
-    @RequestMapping("createTask")
-    public ModelAndView create(@ModelAttribute Task task){
+    @RequestMapping(value = "editTask",method = RequestMethod.GET)
+    public ModelAndView edit(@RequestParam(required = false) Integer id) {
 
-        ModelMap model = new ModelMap();
-        model.addAttribute("id",task.getId());
-        model.addAttribute("title",task.getTitle());
-        model.addAttribute("body",task.getBody());
-        model.addAttribute("user",AuthenticationService.loggedUser.getId());
+        TaskEditVM model = new TaskEditVM();
+        Task task;
 
-        return new ModelAndView("tasks/taskEdit","model",task);
-    }
-
-    @RequestMapping("editTask")
-    public ModelAndView edit(@RequestParam int id, @ModelAttribute Task task){
-        task=taskService.getByID(id);
-
-        if (task==null){
-            return  new ModelAndView("redirect:getMyTask");
-        }else {
-            ModelMap model = new ModelMap();
-            model.addAttribute("id", task.getId());
-            model.addAttribute("title", task.getTitle());
-            model.addAttribute("body", task.getBody());
-            if (AuthenticationService.getLoggedUser()==null){
-                return new ModelAndView("tasks/taskEdit", "taskObject", task);
+        if (id == null) {
+            task = new Task();
+        } else {
+            task = taskService.getByID(id);
+            if (task == null) {
+                return new ModelAndView("redirect:getMyTask");
             }
-            model.addAttribute("user", AuthenticationService.loggedUser.getId());
-            return new ModelAndView("tasks/taskEdit", "taskObject", task);
         }
+        model.setId(task.getId());
+        model.setUser(AuthenticationService.getLoggedUser());
+        model.setBody(task.getBody());
+        model.setTitle(task.getTitle());
+
+        return new ModelAndView("tasks/taskEdit", "taskObject", model);
     }
 
     @RequestMapping(value = "saveTask",method = RequestMethod.POST)
-    public ModelAndView save(@Valid @ModelAttribute Task task, BindingResult bindingResult, ModelMap model){
-        task.setUser(AuthenticationService.loggedUser);
-
+    public ModelAndView save(@Valid @ModelAttribute TaskEditVM vm, BindingResult bindingResult, ModelMap model) {
         if (bindingResult.hasErrors()){
             model.addAttribute("errors",bindingResult.getAllErrors());
-            model.addAttribute("task",task);
-            return  new ModelAndView("tasks/taskEdit","task",task);
+            model.addAttribute("taskObject",vm);
+            return  new ModelAndView("tasks/taskEdit","taskObject",vm);
         }
         else{
-            if (task.getId()!=0){
+            Task task;
+            if (vm.getId()==0){
+                task=new Task();
+            }else{
+                task=taskService.getByID(vm.getId());
+            }
 
-                taskService.update(task);
-            }
-            else{
-                taskService.create(task);
-            }
-            return  new ModelAndView("redirect:getMyTask");
+            task.setTitle(vm.getTitle());
+            task.setBody(vm.getBody());
+            task.setUser(AuthenticationService.getLoggedUser());
+
+            taskService.save(task);
+            return new ModelAndView("redirect:getMyTask");
         }
-
     }
 
     @RequestMapping("deleteTask")
     public ModelAndView delete(@RequestParam Integer id){
         Task task=taskService.getByID(id);
+
+        if (task==null){
+            return  new ModelAndView("redirect:getMyTask");
+        }
         taskService.delete(task);
         return new ModelAndView("redirect:getMyTask");
     }
 
     @RequestMapping(value = {"/getMyTask"})
     public ModelAndView getMyTask() {
-        List<Task> taskList = taskService.getAll().stream().filter(t->t.getUser().getId()== AuthenticationService.loggedUser.getId()).collect(Collectors.toCollection(ArrayList<Task>::new));
+        TaskListVM model=new TaskListVM();
+        model.setTasks(taskService.getAll().stream().filter(t->t.getUser().getId()== AuthenticationService.getLoggedUser().getId()).collect(Collectors.toCollection(ArrayList<Task>::new)));
 
-        return new ModelAndView("tasks/tasksList", "taskList", taskList);
+        return new ModelAndView("tasks/tasksList", "taskList", model.getTasks());
     }
+
     @RequestMapping(value = {"/getAll"})
     public ModelAndView getAll() {
-        List<Task> taskList = taskService.getAll();
+        TaskListVM model=new TaskListVM();
+        model.setTasks(taskService.getAll());
 
-        return new ModelAndView("tasks/tasksList", "taskList", taskList);
+        return new ModelAndView("tasks/tasksList", "taskList", model.getTasks());
     }
 
     @RequestMapping(value = "/")

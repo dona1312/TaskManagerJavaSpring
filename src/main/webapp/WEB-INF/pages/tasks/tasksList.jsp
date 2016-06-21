@@ -33,7 +33,7 @@
                     <%--<c:if test="${user.isAdmin}" >--%>
                         <%--<c:out value="${user.fullName}"/>--%>
                     <%--</c:if>--%>
-                    <a href="/tasks/createTask">Add New task</a>
+                    <a href="/tasks/editTask">Add New task</a>
                 </div>
             </h3>
         </div>

@@ -14,7 +14,7 @@ public class AuthenticationFilter  implements Filter{
     @Override
     public void  init(FilterConfig config){
         this.config = config;
-        config.getServletContext().log("Initializing SessionCheckerFilter");
+        config.getServletContext().log("Initializing AuthenticationFilter");
     }
 
     @Override
@@ -29,10 +29,10 @@ public class AuthenticationFilter  implements Filter{
             HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
             HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
-            RequestContextFilter filter=new RequestContextFilter();
-            filter.doFilter(servletRequest,servletResponse,filterChain);
+            RequestDispatcher dispatcher=httpRequest.getRequestDispatcher(httpRequest.getRequestURI());
+            dispatcher.forward(servletRequest,servletResponse);
 
-            httpResponse.sendRedirect(httpRequest.getRequestURL().toString());
+            return;
         }
     }
 

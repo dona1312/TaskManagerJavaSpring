@@ -17,19 +17,14 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     @Column
-    @NotEmpty(message = "Field required")
-    @Size(min=3, max=30,message = "Username must be between 3 and 30 symbols.")
     private String username;
 
-    @NotEmpty(message = "Field required")
-    @Size(min=3, max=30,message = "Password must be between 3 and 30 symbols.")
     @Column
     private String password;
-//    @NotEmpty
-//    @Size(min=6, max=30)
+
     @Column
     private String fullName;
-//    @NotEmpty
+
     @Column
     private boolean isAdmin;
 

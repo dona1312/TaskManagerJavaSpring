@@ -37,7 +37,7 @@
             </h3>
         </div>
         <div class="panel-body">
-            <form:form id="employeeRegisterForm" cssClass="form-horizontal" modelAttribute="user" method="post" action="saveUser">
+            <form:form id="employeeRegisterForm" cssClass="form-horizontal" modelAttribute="userObject" method="post" action="saveUser">
 
                 <div class="form-group">
                     <form:label path="fullName" cssClass="control-label col-xs-3">Full name</form:label>

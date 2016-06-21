@@ -28,10 +28,10 @@ public class AuthorizationFilter  implements Filter{
             HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
             HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
-            RequestContextFilter filter=new RequestContextFilter();
-            filter.doFilter(servletRequest,servletResponse,filterChain);
+            RequestDispatcher dispatcher=httpRequest.getRequestDispatcher(httpRequest.getRequestURI());
+            dispatcher.forward(servletRequest,servletResponse);
 
-            httpResponse.sendRedirect(httpRequest.getRequestURL().toString());
+            return;
         }
     }
 

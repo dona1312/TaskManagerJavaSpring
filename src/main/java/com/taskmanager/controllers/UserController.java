@@ -3,6 +3,8 @@ package com.taskmanager.controllers;
 import com.taskmanager.entity.User;
 import com.taskmanager.services.auth.AuthenticationService;
 import com.taskmanager.services.impl.UserServiceImpl;
+import com.taskmanager.viewmodels.users.UserEditVM;
+import com.taskmanager.viewmodels.users.UserListVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -10,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,67 +29,76 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @RequestMapping("createUser")
-    public ModelAndView create(@ModelAttribute User user){
+    @RequestMapping(value = "editUser",method = RequestMethod.GET)
+    public ModelAndView edit(@RequestParam(required = false) Integer id){
 
-        ModelMap model = new ModelMap();
-        model.addAttribute("id",user.getId());
-        model.addAttribute("name",user.getFullName());
-        model.addAttribute("username",user.getUsername());
-        model.addAttribute("password",user.getPassword());
-        model.addAttribute("isAdmin",user.getIsAdmin());
+        UserEditVM model = new UserEditVM();
+        User user;
 
-        return new ModelAndView("users/userEdit","model",user);
-    }
-
-    @RequestMapping("editUser")
-    public ModelAndView edit(@RequestParam int id,@ModelAttribute User user){
-        user=userService.getByID(id);
-        if (user==null){
-            return  new ModelAndView("redirect:getAll");
-        }else{
-            ModelMap model = new ModelMap();
-            model.addAttribute("id",user.getId());
-            model.addAttribute("name",user.getFullName());
-            model.addAttribute("username",user.getUsername());
-            model.addAttribute("password",user.getPassword());
-            model.addAttribute("isAdmin",user.getIsAdmin());
-            return  new ModelAndView("users/userEdit","userObject",user);
+        if (id == null) {
+            user=new User();
+        } else {
+           user=userService.getByID(id);
+            if (user == null) {
+                return new ModelAndView("redirect:getMyTask");
+            }
         }
 
+        model.setId(user.getId());
+        model.setFullName(user.getFullName());
+        model.setPassword(user.getPassword());
+        model.setUsername(user.getUsername());
+        model.setIsAdmin(user.getIsAdmin());
+
+        return  new ModelAndView("users/userEdit","userObject",model);
     }
 
-    @RequestMapping("saveUser")
-    public ModelAndView save(@Valid @ModelAttribute User user, BindingResult bindingResult){
+    @RequestMapping(value = "saveUser",method = RequestMethod.POST)
+    public ModelAndView save(@Valid @ModelAttribute UserEditVM vm, BindingResult bindingResult,ModelMap model){
+
         if (bindingResult.hasErrors()){
-            return new ModelAndView("redirect:getAll");
-        }
-
-        if (user.getId()!=0){
-            userService.update(user);
+            model.addAttribute("errors",bindingResult.getAllErrors());
+            model.addAttribute("userObject",vm);
+            return  new ModelAndView("/users/userEdit","userObject",vm);
         }
         else{
-            userService.create(user);
+            User user;
+            if (vm.getId()==0){
+                user=new User();
+            }else{
+                user=userService.getByID(vm.getId());
+            }
+
+            user.setUsername(vm.getUsername());
+            user.setPassword(vm.getPassword());
+            user.setIsAdmin(vm.getIsAdmin());
+            user.setFullName(vm.getFullName());
+
+            userService.save(user);
+            return new ModelAndView("redirect:getAll");
         }
-        return  new ModelAndView("redirect:getAll");
     }
 
     @RequestMapping("deleteUser")
     public ModelAndView delete(@RequestParam Integer id){
         User user=userService.getByID(id);
-        userService.delete(user);
-        return  new ModelAndView("redirect:getAll");
+        if (user==null){
+            return new ModelAndView("redirect:getAll");
+        }else{
+            userService.delete(user);
+            return new ModelAndView("redirect:getAll");
+        }
     }
 
     @RequestMapping(value = {"/getAll"})
     public ModelAndView getAll() {
-        if (AuthenticationService.getLoggedUser()!=null){
-            List<User> userList = userService.getAll();
-            return new ModelAndView("users/usersList", "usersList", userList);
-        }
-        else{
-            return  new ModelAndView("redirect:/login");
-        }
+
+        List<User> userList = userService.getAll();
+        UserListVM model=new UserListVM();
+        model.setUsers(userList);
+
+        return new ModelAndView("users/usersList", "usersList", model.getUsers());
+
     }
 
     @RequestMapping(value = "/")

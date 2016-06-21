@@ -37,7 +37,7 @@
         </div>
 
         <div class="panel-body">
-            <form:form id="employeeRegisterForm" cssClass="form-horizontal" modelAttribute="task" method="post" action="saveTask">
+            <form:form id="employeeRegisterForm" cssClass="form-horizontal" modelAttribute="taskObject" method="post" action="saveTask">
 
                 <div class="form-group">
                     <form:label path="title" cssClass="control-label col-xs-3">Title</form:label>

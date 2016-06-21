@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class AuthenticationService {
 
-    public static User loggedUser;
+    private static User loggedUser;
 
     public  static User getLoggedUser(){
         return loggedUser;

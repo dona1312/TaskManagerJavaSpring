@@ -12,6 +12,7 @@ public interface BaseService<T extends BaseEntity> {
     public void create(T item);
     public void update(T item);
     public void delete(T item);
+    public void save(T item);
     public List<T> getAll();
     public T getByID(int id);
 }

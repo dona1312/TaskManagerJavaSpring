@@ -44,4 +44,13 @@ public class TaskServiceImpl implements BaseService<Task> {
         return taskDAO.getByID(id);
     }
 
+    @Override
+    public void save(Task item) {
+        if (item.getId()!=0){
+            taskDAO.update(item);
+        }
+        else{
+            taskDAO.create(item);
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.taskmanager.services.impl;
 
 import com.taskmanager.dao.BaseDAO;
 import com.taskmanager.dao.UserDAO;
+import com.taskmanager.entity.Task;
 import com.taskmanager.entity.User;
 import com.taskmanager.services.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,15 @@ public class UserServiceImpl implements BaseService<User> {
     @Override
     public User getByID(int id) {
         return userDAO.getByID(id);
+    }
+
+    @Override
+    public void save(User user) {
+        if (user.getId()!=0){
+            userDAO.update(user);
+        }
+        else{
+            userDAO.create(user);
+        }
     }
 }

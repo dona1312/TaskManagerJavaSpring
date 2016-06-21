@@ -23,12 +23,12 @@
 </head>
 <body class=".container-fluid">
 <div class="container myrow-container">
-    <jsp:include page="../shared/menu.jsp" />s
+    <jsp:include page="../shared/menu.jsp" />
     <div class="panel panel-success">
         <div class="panel-heading">
             <h3 class="panel-title">
                 <div align="left"><b>Users List</b></div>
-                <div align="right"><a href="createUser">Add New user</a></div>
+                <div align="right"><a href="/users/editUser">Add New user</a></div>
             </h3>
         </div>
         <div class="panel-body">

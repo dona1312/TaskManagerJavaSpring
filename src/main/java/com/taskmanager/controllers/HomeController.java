@@ -35,7 +35,7 @@ public class HomeController {
         }
 
         AuthenticationService.setLoggedUser(userService.getAll().stream().filter(u->u.getUsername().equals(user.getUsername())&&u.getPassword().equals(user.getPassword())).findFirst().orElse(null));
-        if (AuthenticationService.loggedUser!=null){
+        if (AuthenticationService.getLoggedUser()!=null){
             return new ModelAndView("redirect:/tasks/getMyTask");
         }else{
             return new ModelAndView("redirect:/login");
@@ -49,7 +49,7 @@ public class HomeController {
 
     @RequestMapping(value = "logout")
     public  ModelAndView logout(@ModelAttribute User user){
-        AuthenticationService.loggedUser=null;
+        AuthenticationService.setLoggedUser(null);
         return  new ModelAndView("redirect:/login");
     }
 
