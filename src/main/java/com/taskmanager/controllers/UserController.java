@@ -8,7 +8,6 @@ import com.taskmanager.viewmodels.users.UserListVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.annotation.WebFilter;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -50,29 +48,27 @@ public class UserController {
         model.setUsername(user.getUsername());
         model.setIsAdmin(user.getIsAdmin());
 
-        return  new ModelAndView("users/userEdit","userObject",model);
+        return  new ModelAndView("users/userEdit","model",model);
     }
 
     @RequestMapping(value = "saveUser",method = RequestMethod.POST)
-    public ModelAndView save(@Valid @ModelAttribute UserEditVM vm, BindingResult bindingResult,ModelMap model){
+    public ModelAndView save(@Valid @ModelAttribute("model") UserEditVM model, BindingResult bindingResult){
 
         if (bindingResult.hasErrors()){
-            model.addAttribute("errors",bindingResult.getAllErrors());
-            model.addAttribute("userObject",vm);
-            return  new ModelAndView("/users/userEdit","userObject",vm);
+            return  new ModelAndView("/users/userEdit","model",model);
         }
         else{
             User user;
-            if (vm.getId()==0){
+            if (model.getId()==0){
                 user=new User();
             }else{
-                user=userService.getByID(vm.getId());
+                user=userService.getByID(model.getId());
             }
 
-            user.setUsername(vm.getUsername());
-            user.setPassword(vm.getPassword());
-            user.setIsAdmin(vm.getIsAdmin());
-            user.setFullName(vm.getFullName());
+            user.setUsername(model.getUsername());
+            user.setPassword(model.getPassword());
+            user.setIsAdmin(model.getIsAdmin());
+            user.setFullName(model.getFullName());
 
             userService.save(user);
             return new ModelAndView("redirect:getAll");

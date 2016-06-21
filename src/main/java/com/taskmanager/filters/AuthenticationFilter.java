@@ -19,20 +19,15 @@ public class AuthenticationFilter  implements Filter{
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        if(AuthenticationService.getLoggedUser() == null){
-            HttpServletRequest request = (HttpServletRequest) servletRequest;
-            HttpServletResponse response = (HttpServletResponse) servletResponse;
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
+        if(AuthenticationService.getLoggedUser() == null){
             response.sendRedirect(request.getContextPath() + "/login");
         }
         else if(AuthenticationService.getLoggedUser() != null){
-            HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-            HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-
-            RequestDispatcher dispatcher=httpRequest.getRequestDispatcher(httpRequest.getRequestURI());
+            RequestDispatcher dispatcher=request.getRequestDispatcher(request.getRequestURI());
             dispatcher.forward(servletRequest,servletResponse);
-
-            return;
         }
     }
 

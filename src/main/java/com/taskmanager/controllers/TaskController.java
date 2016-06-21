@@ -49,26 +49,24 @@ public class TaskController {
         model.setBody(task.getBody());
         model.setTitle(task.getTitle());
 
-        return new ModelAndView("tasks/taskEdit", "taskObject", model);
+        return new ModelAndView("tasks/taskEdit", "model", model);
     }
 
     @RequestMapping(value = "saveTask",method = RequestMethod.POST)
-    public ModelAndView save(@Valid @ModelAttribute TaskEditVM vm, BindingResult bindingResult, ModelMap model) {
+    public ModelAndView save(@Valid @ModelAttribute("model") TaskEditVM model, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            model.addAttribute("errors",bindingResult.getAllErrors());
-            model.addAttribute("taskObject",vm);
-            return  new ModelAndView("tasks/taskEdit","taskObject",vm);
+            return  new ModelAndView("tasks/taskEdit","taskObject",model);
         }
         else{
             Task task;
-            if (vm.getId()==0){
+            if (model.getId()==0){
                 task=new Task();
             }else{
-                task=taskService.getByID(vm.getId());
+                task=taskService.getByID(model.getId());
             }
 
-            task.setTitle(vm.getTitle());
-            task.setBody(vm.getBody());
+            task.setTitle(model.getTitle());
+            task.setBody(model.getBody());
             task.setUser(AuthenticationService.getLoggedUser());
 
             taskService.save(task);

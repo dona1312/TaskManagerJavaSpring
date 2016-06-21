@@ -35,19 +35,23 @@
                 </h3>
             </div>
             <div class="panel-body">
-                <form:form id="reportRegisterForm" cssClass="form-horizontal" modelAttribute="user" method="post" action="/register">
+                <form:form cssClass="form-horizontal" modelAttribute="model" method="post" action="/register">
+
+                    <form:errors path="*" cssClass="text-danger"></form:errors>
 
                     <div class="form-group">
-                        <div class="control-label col-xs-3"><form:label path="username">Username</form:label></div>
+                        <div class="control-label col-xs-3">
+                            <form:label path="username">Username</form:label></div>
                         <div class="col-xs-6">
-                            <form:input cssClass="form-control" path="username" id="username" name = "username" value=""/>
+                            <form:input cssClass="form-control" path="username" value=""/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <div class="control-label col-xs-3"><form:label path="password">Password</form:label></div>
+                        <div class="control-label col-xs-3">
+                            <form:label path="password">Password</form:label></div>
                         <div class="col-xs-6">
-                            <form:input type="password" cssClass="form-control" path="password" id="password" name = "password" value=""/>
+                            <form:input type="password" cssClass="form-control" path="password" value=""/>
                         </div>
                     </div>
 
@@ -55,9 +59,9 @@
                         <div class="control-label col-xs-3"><form:label path="fullName">Full name</form:label></div>
                         <div class="col-xs-6">
                             <form:input cssClass="form-control" path="fullName" id="fullName" name = "fullName" value=""/>
-                            <c:forEach items="${errors}" var="err">
-                                <div class="alert alert-danger fade in"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><c:out value="${err.defaultMessage}"/></div>
-                            </c:forEach>
+                            <%--<c:forEach items="${errors}" var="err">--%>
+                                <%--<div class="alert alert-danger fade in"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><c:out value="${err.defaultMessage}"/></div>--%>
+                            <%--</c:forEach>--%>
                         </div>
                     </div>
 

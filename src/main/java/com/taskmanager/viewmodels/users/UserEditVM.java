@@ -19,7 +19,7 @@ public class UserEditVM {
     @Size(min=3, max=30,message = "Password must be between 3 and 30 symbols.")
     private String password;
 
-    @NotEmpty(message = "Field full name required")
+//    @NotEmpty(message = "Field full name required")
     private String fullName;
 
     @NotNull

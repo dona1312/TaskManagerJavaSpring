@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements BaseService<User> {
 
-//    @Qualifier("userDAO")
+    @Qualifier("userDAO")
     @Autowired()
     private UserDAO userDAO;
 

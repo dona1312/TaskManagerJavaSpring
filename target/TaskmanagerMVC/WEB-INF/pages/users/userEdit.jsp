@@ -37,34 +37,34 @@
             </h3>
         </div>
         <div class="panel-body">
-            <form:form id="employeeRegisterForm" cssClass="form-horizontal" modelAttribute="userObject" method="post" action="saveUser">
+            <form:form id="employeeRegisterForm" cssClass="form-horizontal" modelAttribute="model" method="post" action="saveUser">
 
                 <div class="form-group">
                     <form:label path="fullName" cssClass="control-label col-xs-3">Full name</form:label>
                     <div class="col-xs-6">
-                        <form:hidden path="id" value="${userObject.id}"/>
-                        <form:input cssClass="form-control" path="fullName" value="${userObject.fullName}"/>
+                        <form:hidden path="id" value="${model.id}"/>
+                        <form:input cssClass="form-control" path="fullName" value="${model.fullName}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <form:label path="username" cssClass="control-label col-xs-3">Username</form:label>
                     <div class="col-xs-6">
-                        <form:input cssClass="form-control" path="username" value="${userObject.username}"/>
+                        <form:input cssClass="form-control" path="username" value="${model.username}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="control-label col-xs-3"><form:label path="password">Password</form:label></div>
                     <div class="col-xs-6">
-                        <form:input cssClass="form-control" path="password" value="${userObject.password}"/>
+                        <form:input cssClass="form-control" path="password" value="${model.password}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="control-label col-xs-3"><form:label path="">Is Admin</form:label></div>
                     <div class="col-xs-6">
-                        <form:input cssClass="form-control" path="isAdmin" value="${userObject.isAdmin}"/>
+                        <form:input cssClass="form-control" path="isAdmin" value="${model.isAdmin}"/>
                     </div>
                 </div>
 

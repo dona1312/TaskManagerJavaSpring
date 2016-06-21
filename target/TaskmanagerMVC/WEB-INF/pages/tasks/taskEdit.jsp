@@ -37,23 +37,21 @@
         </div>
 
         <div class="panel-body">
-            <form:form id="employeeRegisterForm" cssClass="form-horizontal" modelAttribute="taskObject" method="post" action="saveTask">
+            <form:form  cssClass="form-horizontal" modelAttribute="model" method="post" action="saveTask">
 
                 <div class="form-group">
                     <form:label path="title" cssClass="control-label col-xs-3">Title</form:label>
                     <div class="col-xs-6">
-                        <form:hidden path="id" value="${taskObject.id}"/>
-                        <form:input cssClass="form-control" path="title" value="${taskObject.title}"/>
+                        <form:hidden path="id" value="${model.id}"/>
+                        <form:input cssClass="form-control" path="title" value="${model.title}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <form:label path="body" cssClass="control-label col-xs-3">Body</form:label>
                     <div class="col-xs-6">
-                        <form:input cssClass="form-control" path="body" value="${taskObject.body}"/>
-                        <c:forEach items="${errors}" var="err">
-                            <div class="alert alert-danger fade in"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><c:out value="${err.defaultMessage}"/></div>
-                        </c:forEach>
+                        <form:input cssClass="form-control" path="body" value="${model.body}"/>
+                        <form:errors path="*" cssClass="text-danger"></form:errors>
                     </div>
                 </div>
 

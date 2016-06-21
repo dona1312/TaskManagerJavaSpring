@@ -35,24 +35,21 @@
                 </h3>
             </div>
             <div class="panel-body">
-                <form:form id="reportRegisterForm" cssClass="form-horizontal" modelAttribute="user" method="post" action="/loginUser">
-
+                <form:form cssClass="form-horizontal" modelAttribute="model" method="post" action="/loginUser">
                     <div class="form-group">
-                        <div class="control-label col-xs-3"><form:label path="username">Username</form:label></div>
+                        <div class="control-label col-xs-3">
+                            <form:label path="username">Username</form:label></div>
                         <div class="col-xs-6">
-                            <form:input cssClass="form-control" path="username" id="username" name = "username" value=""/>
-                            <%--<form:errors path="username" cssClass="alert alert-danger"></form:errors>--%>
+                            <form:input cssClass="form-control" path="username" value=""/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <div class="control-label col-xs-3"><form:label path="password">Password</form:label></div>
+                        <div class="control-label col-xs-3">
+                            <form:label path="password">Password</form:label></div>
                         <div class="col-xs-6">
-                            <form:input type="password" cssClass="form-control" path="password" id="password" name = "password" value=""/>
-                            <%--<form:errors path="password" cssClass="alert alert-danger"></form:errors>--%>
-                            <c:forEach items="${errors}" var="err">
-                                <div class="alert alert-danger fade in"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><c:out value="${err.defaultMessage}"/></div>
-                            </c:forEach>
+                            <form:input type="password" cssClass="form-control" path="password" value=""/>
+                            <form:errors path="*" cssClass="text-danger"></form:errors>
                         </div>
                     </div>
 
